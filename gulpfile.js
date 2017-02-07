@@ -1,11 +1,16 @@
 var gulp = require('gulp');
 var ts = require('gulp-typescript');
 var tsProject = ts.createProject('tsconfig.json');
+var sourcemaps = require('gulp-sourcemaps');
 
 gulp.task('compile', function () {
-    return tsProject.src()
+    return tsProject
+        .src()
+        .pipe(sourcemaps.init())
         .pipe(tsProject())
-        .js.pipe(gulp.dest('dist'));
+        .js
+        .pipe(sourcemaps.write('.', {includeContent: false, sourceRoot: '../src'}))
+        .pipe(gulp.dest('dist'));
 });
 
 gulp.task('watch', ['compile'], function() {
